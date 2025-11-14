@@ -1,15 +1,19 @@
 package main
 
 import (
-	"log"
+	"log/slog"
+	"sso-service/internal/app"
 	"sso-service/internal/config"
 	myLog "sso-service/internal/lib/log"
 )
 
 func main() {
 	cfg := config.MustLoad()
-	log.Println("config was loaded successfully")
-
 	logger := myLog.MustLoad(cfg.Env)
-	logger.Debug("logger was loaded successfully")
+
+	logger.Info("application sso-service is starting",
+		slog.String("env", cfg.Env))
+
+	application := app.New(*cfg, logger)
+	application.GRPC.MustRun()
 }
