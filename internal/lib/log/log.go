@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var (
+const (
 	envLocal = "local"
 	envDev   = "dev"
 	envProd  = "prod"
