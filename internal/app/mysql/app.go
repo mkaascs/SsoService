@@ -3,13 +3,22 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"log/slog"
+	"os"
 	sloglib "sso-service/internal/lib/log/slog"
 )
 
 type App struct {
 	db     *sql.DB
 	logger *slog.Logger
+}
+
+func (a *App) MustConnect() {
+	if err := a.Connect(); err != nil {
+		a.logger.Error("failed to connect mysql app", sloglib.Error(err))
+		os.Exit(1)
+	}
 }
 
 func (a *App) Connect() error {

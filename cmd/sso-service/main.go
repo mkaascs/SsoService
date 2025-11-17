@@ -19,6 +19,7 @@ func main() {
 
 	application := app.New(*cfg, logger)
 
+	application.MySql.MustConnect()
 	go application.GRPC.MustRun()
 
 	stop := make(chan os.Signal, 1)
@@ -27,5 +28,7 @@ func main() {
 	<-stop
 
 	application.GRPC.Stop()
+	_ = application.MySql.Close()
+
 	logger.Info("application sso-service stopped")
 }
