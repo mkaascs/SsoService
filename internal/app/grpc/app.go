@@ -26,18 +26,18 @@ func (a *App) MustRun() {
 func (a *App) Run() error {
 	const fn = "app.grpc.App.Run"
 
-	a.logger.With(slog.String("fn", fn))
+	log := a.logger.With(slog.String("fn", fn))
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", a.port))
 	if err != nil {
-		a.logger.Error("failed to listen tcp", sloglib.Error(err))
+		log.Error("failed to listen tcp", sloglib.Error(err))
 		return fmt.Errorf("%s: failed to listen tcp: %w", fn, err)
 	}
 
-	a.logger.Info("grpc server is running", slog.Int("port", a.port))
+	log.Info("grpc server is running", slog.Int("port", a.port))
 
 	if err := a.server.Serve(listener); err != nil {
-		a.logger.Error("failed to serve", sloglib.Error(err))
+		log.Error("failed to serve", sloglib.Error(err))
 		return fmt.Errorf("%s: failed to serve: %w", fn, err)
 	}
 
@@ -46,9 +46,9 @@ func (a *App) Run() error {
 
 func (a *App) Stop() {
 	const fn = "app.grpc.App.Stop"
+	log := a.logger.With(slog.String("fn", fn))
 
-	a.logger.With(slog.String("fn", fn))
-	a.logger.Info("grpc server is stopping", slog.Int("port", a.port))
+	log.Info("grpc server is stopping", slog.Int("port", a.port))
 
 	a.server.GracefulStop()
 }
