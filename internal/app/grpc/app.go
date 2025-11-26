@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
-	"sso-service/internal/delivery/grpc/auth"
+	grpc2 "sso-service/internal/delivery/grpc/auth"
 	sloglib "sso-service/internal/lib/log/slog"
 )
 
@@ -56,7 +56,7 @@ func (a *App) Stop() {
 func New(logger *slog.Logger, port int) *App {
 	server := grpc.NewServer()
 
-	auth.Register(server)
+	grpc2.Register(server)
 
 	return &App{
 		server: server,

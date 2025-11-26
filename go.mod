@@ -8,7 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/joho/godotenv v1.5.1
-	github.com/mkaascs/SsoProto v1.0.1
+	github.com/mkaascs/SsoProto v1.0.2
 	google.golang.org/grpc v1.76.0
 )
 

@@ -7,5 +7,7 @@ import (
 )
 
 type Auth interface {
-	Register(ctx context.Context, register commands.Register) (results.Register, error)
+	Register(ctx context.Context, command commands.Register) (*results.Register, error)
+	Login(ctx context.Context, command commands.Login) (*results.Login, error)
+	Refresh(ctx context.Context, command commands.Refresh) (*results.Refresh, error)
 }
