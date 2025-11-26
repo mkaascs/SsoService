@@ -1,0 +1,33 @@
+package auth
+
+import (
+	"context"
+	"errors"
+	ssov1 "github.com/mkaascs/SsoProto/gen/go/sso"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"sso-service/internal/domain/models/commands"
+	authErrors "sso-service/internal/domain/models/errors"
+)
+
+func (s *server) Register(ctx context.Context, request *ssov1.RegisterRequest) (*ssov1.RegisterResponse, error) {
+	// TODO: validate
+
+	result, err := s.auth.Register(ctx, commands.Register{
+		Login:    request.Login,
+		Password: request.Password,
+		ClientId: request.ClientId,
+	})
+
+	if err != nil {
+		if errors.Is(err, authErrors.ErrUserAlreadyExists) {
+			return nil, status.Error(codes.AlreadyExists, "user with this login already exists")
+		}
+
+		return nil, status.Error(codes.Internal, "internal error")
+	}
+
+	return &ssov1.RegisterResponse{
+		UserId: result.UserId,
+	}, nil
+}
