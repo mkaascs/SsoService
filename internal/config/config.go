@@ -25,8 +25,8 @@ type GrpcConfig struct {
 
 type SsoConfig struct {
 	Issuer          string        `yaml:"issuer" env-default:"sso-service"`
-	AccessTokenTtl  time.Duration `yaml:"access_token_ttl" env-default:"15m"`
-	RefreshTokenTtl time.Duration `yaml:"refresh_token_ttl" env-default:"720h"`
+	AccessTokenTTL  time.Duration `yaml:"access_token_ttl" env-default:"15m"`
+	RefreshTokenTTL time.Duration `yaml:"refresh_token_ttl" env-default:"720h"`
 }
 
 func MustLoad() *Config {

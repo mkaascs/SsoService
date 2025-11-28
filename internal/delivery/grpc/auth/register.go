@@ -6,8 +6,8 @@ import (
 	ssov1 "github.com/mkaascs/SsoProto/gen/go/sso"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"sso-service/internal/domain/models/commands"
-	authErrors "sso-service/internal/domain/models/errors"
+	"sso-service/internal/domain/dto/commands"
+	authErrors "sso-service/internal/domain/entities/errors"
 )
 
 func (s *server) Register(ctx context.Context, request *ssov1.RegisterRequest) (*ssov1.RegisterResponse, error) {
@@ -30,6 +30,6 @@ func (s *server) Register(ctx context.Context, request *ssov1.RegisterRequest) (
 	}
 
 	return &ssov1.RegisterResponse{
-		UserId: result.UserId,
+		UserId: result.UserID,
 	}, nil
 }

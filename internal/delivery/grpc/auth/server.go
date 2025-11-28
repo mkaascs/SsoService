@@ -3,7 +3,7 @@ package auth
 import (
 	ssov1 "github.com/mkaascs/SsoProto/gen/go/sso"
 	"google.golang.org/grpc"
-	"sso-service/internal/domain/services"
+	"sso-service/internal/domain/interfaces/services"
 )
 
 type server struct {

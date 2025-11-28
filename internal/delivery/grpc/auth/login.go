@@ -6,8 +6,8 @@ import (
 	ssov1 "github.com/mkaascs/SsoProto/gen/go/sso"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"sso-service/internal/domain/models/commands"
-	authErrors "sso-service/internal/domain/models/errors"
+	"sso-service/internal/domain/dto/commands"
+	authErrors "sso-service/internal/domain/entities/errors"
 )
 
 func (s *server) Login(ctx context.Context, request *ssov1.LoginRequest) (*ssov1.LoginResponse, error) {
