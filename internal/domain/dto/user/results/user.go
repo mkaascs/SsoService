@@ -1,5 +1,5 @@
 package results
 
-type AddUser struct {
+type Add struct {
 	UserID int64
 }

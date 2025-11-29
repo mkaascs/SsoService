@@ -4,7 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"sso-service/internal/config"
-	"sso-service/internal/domain/dto/commands"
+	"sso-service/internal/domain/dto/jwt/commands"
 	authErrors "sso-service/internal/domain/entities/errors"
 	"testing"
 	"time"

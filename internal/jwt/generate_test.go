@@ -5,7 +5,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"sso-service/internal/config"
-	"sso-service/internal/domain/dto/commands"
+	jwt2 "sso-service/internal/domain/dto/jwt/commands"
 	"testing"
 	"time"
 )
@@ -32,7 +32,7 @@ func TestService_Generate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.role, func(t *testing.T) {
-			result, err := jwtService.Generate(commands.Generate{
+			result, err := jwtService.Generate(jwt2.Generate{
 				UserID: test.id,
 				Role:   test.role,
 			})

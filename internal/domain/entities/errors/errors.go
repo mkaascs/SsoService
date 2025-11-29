@@ -3,9 +3,10 @@ package errors
 import "errors"
 
 var (
-	ErrUserAlreadyExists   = errors.New("user already exists")
-	ErrUserNotFound        = errors.New("user not found")
-	ErrInvalidPassword     = errors.New("invalid credentials")
-	ErrInvalidRefreshToken = errors.New("invalid refresh token")
-	ErrAccessTokenExpired  = errors.New("access token expired")
+	ErrUserAlreadyExists         = errors.New("user already exists")
+	ErrUserNotFound              = errors.New("user not found")
+	ErrInvalidPassword           = errors.New("invalid credentials")
+	ErrAccessTokenExpired        = errors.New("access token expired")
+	ErrInvalidRefreshToken       = errors.New("invalid refresh token")
+	ErrRefreshTokenAlreadyExists = errors.New("refresh token already exists")
 )

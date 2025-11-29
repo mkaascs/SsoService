@@ -1,20 +1,20 @@
 package commands
 
-type AuthBase struct {
+type Base struct {
 	Login    string
 	Password string
-	ClientId string
+	ClientID string
 }
 
 type Register struct {
-	AuthBase
+	Base
 }
 
 type Login struct {
-	AuthBase
+	Base
 }
 
 type Refresh struct {
 	RefreshToken string
-	ClientId     string
+	ClientID     string
 }

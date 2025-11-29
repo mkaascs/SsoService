@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"sso-service/internal/domain/dto/commands"
-	"sso-service/internal/domain/dto/results"
+	"sso-service/internal/domain/dto/jwt/commands"
+	"sso-service/internal/domain/dto/jwt/results"
 	authErrors "sso-service/internal/domain/entities/errors"
 )
 

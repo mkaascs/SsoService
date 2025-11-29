@@ -6,7 +6,7 @@ import (
 	ssov1 "github.com/mkaascs/SsoProto/gen/go/sso"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"sso-service/internal/domain/dto/commands"
+	"sso-service/internal/domain/dto/auth/commands"
 	authErrors "sso-service/internal/domain/entities/errors"
 )
 
@@ -14,7 +14,7 @@ func (s *server) Register(ctx context.Context, request *ssov1.RegisterRequest) (
 	// TODO: validate
 
 	result, err := s.auth.Register(ctx, commands.Register{
-		AuthBase: commands.AuthBase{
+		Base: commands.Base{
 			Login:    request.Login,
 			Password: request.Password,
 			ClientID: request.ClientId,
