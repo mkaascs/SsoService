@@ -7,4 +7,5 @@ var (
 	ErrUserNotFound        = errors.New("user not found")
 	ErrInvalidPassword     = errors.New("invalid credentials")
 	ErrInvalidRefreshToken = errors.New("invalid refresh token")
+	ErrAccessTokenExpired  = errors.New("access token expired")
 )
