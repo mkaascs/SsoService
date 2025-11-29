@@ -1,12 +1,15 @@
 package auth
 
-import "sso-service/internal/domain/interfaces/repositories"
+import (
+	"sso-service/internal/domain/interfaces/repositories"
+	"sso-service/internal/domain/interfaces/services"
+)
 
-type Service struct {
+type service struct {
 	users  repositories.User
 	tokens repositories.RefreshToken
 }
 
-func New(users repositories.User, tokens repositories.RefreshToken) *Service {
-	return &Service{users: users, tokens: tokens}
+func New(users repositories.User, tokens repositories.RefreshToken) services.Auth {
+	return &service{users: users, tokens: tokens}
 }

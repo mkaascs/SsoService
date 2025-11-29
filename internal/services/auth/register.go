@@ -6,6 +6,6 @@ import (
 	"sso-service/internal/domain/dto/results"
 )
 
-func (s *Service) Register(ctx context.Context, command commands.Register) (*results.Register, error) {
-
+func (s *service) Register(ctx context.Context, command commands.Register) (*results.Register, error) {
+	return nil, nil
 }
