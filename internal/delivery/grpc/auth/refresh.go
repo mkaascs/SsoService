@@ -15,7 +15,7 @@ func (s *server) Refresh(ctx context.Context, request *ssov1.RefreshRequest) (*s
 
 	result, err := s.auth.Refresh(ctx, commands.Refresh{
 		RefreshToken: request.RefreshToken,
-		ClientId:     request.ClientId,
+		ClientID:     request.ClientId,
 	})
 
 	if err != nil {

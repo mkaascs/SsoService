@@ -17,7 +17,7 @@ func (s *server) Register(ctx context.Context, request *ssov1.RegisterRequest) (
 		AuthBase: commands.AuthBase{
 			Login:    request.Login,
 			Password: request.Password,
-			ClientId: request.ClientId,
+			ClientID: request.ClientId,
 		},
 	})
 

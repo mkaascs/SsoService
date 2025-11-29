@@ -17,7 +17,7 @@ func (s *server) Login(ctx context.Context, request *ssov1.LoginRequest) (*ssov1
 		AuthBase: commands.AuthBase{
 			Login:    request.Login,
 			Password: request.Password,
-			ClientId: request.ClientId,
+			ClientID: request.ClientId,
 		},
 	})
 
