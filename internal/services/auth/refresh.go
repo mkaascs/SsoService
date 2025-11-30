@@ -2,10 +2,79 @@ package auth
 
 import (
 	"context"
-	"sso-service/internal/domain/dto/commands"
-	"sso-service/internal/domain/dto/results"
+	"errors"
+	"fmt"
+	"log/slog"
+	"sso-service/internal/domain/dto/auth/commands"
+	"sso-service/internal/domain/dto/auth/results"
+	jwtCommands "sso-service/internal/domain/dto/jwt/commands"
+	tokenCommands "sso-service/internal/domain/dto/token/commands"
+	"sso-service/internal/domain/entities"
+	authErrors "sso-service/internal/domain/entities/errors"
+	sloglib "sso-service/internal/lib/log/slog"
 )
 
 func (s *service) Refresh(ctx context.Context, command commands.Refresh) (*results.Refresh, error) {
-	return nil, nil
+	const fn = "services.auth.service.Refresh"
+	log := s.log.With(slog.String("fn", fn))
+
+	tx, err := s.tokens.BeginTx(ctx)
+	if err != nil {
+		log.Error("failed to begin tx", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to begin tx: %w", fn, err)
+	}
+
+	defer func() {
+		if err := tx.Rollback(); err != nil {
+			log.Error("failed to rollback tx", sloglib.Error(err))
+		}
+	}()
+
+	newRefreshToken := s.generateRefreshToken()
+
+	result, err := s.tokens.UpdateByTokenTx(ctx, tx, tokenCommands.UpdateByToken{
+		RefreshTokenHash:    s.hashRefreshToken(command.RefreshToken),
+		NewRefreshTokenHash: s.hashRefreshToken(newRefreshToken),
+		ClientID:            command.ClientID,
+	})
+
+	if err != nil {
+		if errors.Is(err, authErrors.ErrInvalidRefreshToken) {
+			log.Info("failed to update refresh token", sloglib.Error(err))
+			return nil, authErrors.ErrInvalidRefreshToken
+		}
+
+		log.Error("failed to update refresh token", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to update refresh token: %w", fn, err)
+	}
+
+	user, err := s.users.GetByID(ctx, result.UserID)
+	if err != nil {
+		log.Error("failed to get user", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to get user: %w", fn, err)
+	}
+
+	accessToken, err := s.jwt.Generate(jwtCommands.Generate{
+		UserID: user.ID,
+		Role:   user.Role,
+	})
+
+	if err != nil {
+		log.Error("failed to generate access token", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to generate access token: %w", fn, err)
+	}
+
+	if err = tx.Commit(); err != nil {
+		log.Error("failed to commit tx", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to commit tx: %w", fn, err)
+	}
+
+	log.Info("user refreshed tokens successfully", slog.Int64("user_id", user.ID))
+
+	return &results.Refresh{
+		Tokens: entities.TokenPair{
+			AccessToken:  accessToken.Token,
+			RefreshToken: newRefreshToken,
+		},
+	}, nil
 }

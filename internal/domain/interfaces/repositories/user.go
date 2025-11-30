@@ -7,6 +7,8 @@ import (
 )
 
 type User interface {
-	BeginTx(ctx context.Context) (Tx, error)
+	TxBeginner
 	AddTx(ctx context.Context, tx Tx, command commands.Add) (*results.Add, error)
+	GetByID(ctx context.Context, userID int64) (*results.Get, error)
+	GetByLogin(ctx context.Context, command commands.GetByLogin) (*results.Get, error)
 }

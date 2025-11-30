@@ -6,3 +6,8 @@ type Add struct {
 	PasswordHash string
 	ClientID     string
 }
+
+type GetByLogin struct {
+	Login    string
+	ClientID string
+}

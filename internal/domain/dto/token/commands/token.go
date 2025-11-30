@@ -9,8 +9,13 @@ type Add struct {
 	ExpiresAt        time.Time
 }
 
-type Update struct {
+type UpdateByToken struct {
 	RefreshTokenHash    string
 	NewRefreshTokenHash string
 	ClientID            string
+}
+
+type UpdateByUserID struct {
+	UserID              int64
+	NewRefreshTokenHash string
 }

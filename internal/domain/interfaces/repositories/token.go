@@ -7,6 +7,8 @@ import (
 )
 
 type RefreshToken interface {
+	TxBeginner
 	AddTx(ctx context.Context, tx Tx, command commands.Add) error
-	Update(ctx context.Context, command commands.Update) (*results.Update, error)
+	UpdateByTokenTx(ctx context.Context, tx Tx, command commands.UpdateByToken) (*results.Update, error)
+	UpdateByUserIDTx(ctx context.Context, tx Tx, command commands.UpdateByUserID) (*results.Update, error)
 }

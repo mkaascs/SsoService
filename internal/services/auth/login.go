@@ -2,10 +2,89 @@ package auth
 
 import (
 	"context"
-	"sso-service/internal/domain/dto/commands"
-	"sso-service/internal/domain/dto/results"
+	"errors"
+	"fmt"
+	"golang.org/x/crypto/bcrypt"
+	"log/slog"
+	"sso-service/internal/domain/dto/auth/commands"
+	"sso-service/internal/domain/dto/auth/results"
+	jwtCommands "sso-service/internal/domain/dto/jwt/commands"
+	tokenCommands "sso-service/internal/domain/dto/token/commands"
+	userCommands "sso-service/internal/domain/dto/user/commands"
+	"sso-service/internal/domain/entities"
+	authErrors "sso-service/internal/domain/entities/errors"
+	sloglib "sso-service/internal/lib/log/slog"
 )
 
 func (s *service) Login(ctx context.Context, command commands.Login) (*results.Login, error) {
-	return nil, nil
+	const fn = "services.auth.service.Login"
+	log := s.log.With(slog.String("fn", fn))
+
+	tx, err := s.users.BeginTx(ctx)
+	if err != nil {
+		log.Error("failed to begin tx", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to begin tx: %w", fn, err)
+	}
+
+	defer func() {
+		if err := tx.Rollback(); err != nil {
+			log.Error("failed to rollback tx", sloglib.Error(err))
+		}
+	}()
+
+	user, err := s.users.GetByLogin(ctx, userCommands.GetByLogin{
+		Login:    command.Login,
+		ClientID: command.ClientID,
+	})
+
+	if err != nil {
+		if errors.Is(err, authErrors.ErrUserNotFound) {
+			log.Info("failed to get user by login", sloglib.Error(err))
+			return nil, authErrors.ErrUserNotFound
+		}
+
+		log.Error("failed to get user by login", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to get user by login: %w", fn, err)
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(command.Password))
+	if err != nil {
+		log.Info("password hashes are different", slog.Int64("user_id", user.ID))
+		return nil, authErrors.ErrInvalidPassword
+	}
+
+	newRefreshToken := s.generateRefreshToken()
+	_, err = s.tokens.UpdateByUserIDTx(ctx, tx, tokenCommands.UpdateByUserID{
+		UserID:              user.ID,
+		NewRefreshTokenHash: s.hashRefreshToken(newRefreshToken),
+	})
+
+	if err != nil {
+		log.Error("failed to update refresh token", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to update refresh token: %w", fn, err)
+	}
+
+	accessToken, err := s.jwt.Generate(jwtCommands.Generate{
+		UserID: user.ID,
+		Role:   user.Role,
+	})
+
+	if err != nil {
+		log.Error("failed to generate access token", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to generate access token: %w", fn, err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Error("failed to commit tx", sloglib.Error(err))
+		return nil, fmt.Errorf("%s: failed to commit tx: %w", fn, err)
+	}
+
+	log.Info("user successfully logged in", slog.Int64("user_id", user.ID))
+
+	return &results.Login{
+		Tokens: entities.TokenPair{
+			AccessToken:  accessToken.Token,
+			RefreshToken: newRefreshToken,
+		},
+	}, nil
 }
