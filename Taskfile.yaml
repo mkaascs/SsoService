@@ -1,0 +1,15 @@
+version: "3"
+
+tasks:
+  default:
+    desc: "Commands list"
+    cmds:
+      - task --list --color
+  mocks:
+    desc: "Generating all mocks from domain interfaces"
+    cmds:
+      - ./scripts/gen_mocks.sh
+  test:
+    desc: "Running all tests"
+    cmds:
+      - go test -v -coverprofile=coverage.out ./...
