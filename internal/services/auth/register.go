@@ -13,6 +13,7 @@ import (
 	"sso-service/internal/domain/entities"
 	authErrors "sso-service/internal/domain/entities/errors"
 	sloglib "sso-service/internal/lib/log/slog"
+	"sso-service/internal/lib/refreshToken"
 	"time"
 )
 
@@ -55,7 +56,7 @@ func (s *service) Register(ctx context.Context, command commands.Register) (*res
 		return nil, fmt.Errorf("%s: failed to add user: %w", fn, err)
 	}
 
-	refreshTokenHash := s.hashRefreshToken(s.generateRefreshToken())
+	refreshTokenHash := refreshToken.Hash(refreshToken.Generate(), s.hmacSecret)
 
 	err = s.tokens.AddTx(ctx, tx, tokenCommands.Add{
 		UserID:           result.UserID,

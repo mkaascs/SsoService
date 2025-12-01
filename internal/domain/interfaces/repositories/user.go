@@ -4,11 +4,12 @@ import (
 	"context"
 	"sso-service/internal/domain/dto/user/commands"
 	"sso-service/internal/domain/dto/user/results"
+	"sso-service/internal/domain/interfaces/tx"
 )
 
 type User interface {
-	TxBeginner
-	AddTx(ctx context.Context, tx Tx, command commands.Add) (*results.Add, error)
+	tx.Beginner
+	AddTx(ctx context.Context, tx tx.Tx, command commands.Add) (*results.Add, error)
 	GetByID(ctx context.Context, userID int64) (*results.Get, error)
 	GetByLogin(ctx context.Context, command commands.GetByLogin) (*results.Get, error)
 }

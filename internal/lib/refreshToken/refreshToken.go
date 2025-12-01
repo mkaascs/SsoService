@@ -1,0 +1,19 @@
+package refreshToken
+
+import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"sso-service/internal/lib/rand"
+)
+
+func Generate() string {
+	token, _ := rand.GenerateBase64(32)
+	return token
+}
+
+func Hash(token string, hmacSecret []byte) string {
+	h := hmac.New(sha256.New, hmacSecret)
+	h.Write([]byte(token))
+	return hex.EncodeToString(h.Sum(nil))
+}

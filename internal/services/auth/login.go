@@ -14,6 +14,7 @@ import (
 	"sso-service/internal/domain/entities"
 	authErrors "sso-service/internal/domain/entities/errors"
 	sloglib "sso-service/internal/lib/log/slog"
+	"sso-service/internal/lib/refreshToken"
 )
 
 func (s *service) Login(ctx context.Context, command commands.Login) (*results.Login, error) {
@@ -53,10 +54,10 @@ func (s *service) Login(ctx context.Context, command commands.Login) (*results.L
 		return nil, authErrors.ErrInvalidPassword
 	}
 
-	newRefreshToken := s.generateRefreshToken()
+	newRefreshToken := refreshToken.Generate()
 	_, err = s.tokens.UpdateByUserIDTx(ctx, tx, tokenCommands.UpdateByUserID{
 		UserID:              user.ID,
-		NewRefreshTokenHash: s.hashRefreshToken(newRefreshToken),
+		NewRefreshTokenHash: refreshToken.Hash(newRefreshToken, s.hmacSecret),
 	})
 
 	if err != nil {

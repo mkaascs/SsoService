@@ -1,4 +1,4 @@
-package repositories
+package tx
 
 import (
 	"context"
@@ -9,6 +9,6 @@ type Tx interface {
 	Commit() error
 }
 
-type TxBeginner interface {
+type Beginner interface {
 	BeginTx(ctx context.Context) (Tx, error)
 }

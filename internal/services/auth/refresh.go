@@ -12,6 +12,7 @@ import (
 	"sso-service/internal/domain/entities"
 	authErrors "sso-service/internal/domain/entities/errors"
 	sloglib "sso-service/internal/lib/log/slog"
+	"sso-service/internal/lib/refreshToken"
 )
 
 func (s *service) Refresh(ctx context.Context, command commands.Refresh) (*results.Refresh, error) {
@@ -30,11 +31,11 @@ func (s *service) Refresh(ctx context.Context, command commands.Refresh) (*resul
 		}
 	}()
 
-	newRefreshToken := s.generateRefreshToken()
+	newRefreshToken := refreshToken.Generate()
 
 	result, err := s.tokens.UpdateByTokenTx(ctx, tx, tokenCommands.UpdateByToken{
-		RefreshTokenHash:    s.hashRefreshToken(command.RefreshToken),
-		NewRefreshTokenHash: s.hashRefreshToken(newRefreshToken),
+		RefreshTokenHash:    refreshToken.Hash(command.RefreshToken, s.hmacSecret),
+		NewRefreshTokenHash: refreshToken.Hash(newRefreshToken, s.hmacSecret),
 		ClientID:            command.ClientID,
 	})
 
