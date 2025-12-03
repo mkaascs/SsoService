@@ -11,4 +11,5 @@ type User struct {
 	Login        string
 	PasswordHash string
 	Role         string
+	ClientID     string
 }
