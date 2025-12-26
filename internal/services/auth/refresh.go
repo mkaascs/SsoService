@@ -8,7 +8,7 @@ import (
 	"sso-service/internal/domain/dto/auth/commands"
 	"sso-service/internal/domain/dto/auth/results"
 	jwtCommands "sso-service/internal/domain/dto/jwt/commands"
-	tokenCommands "sso-service/internal/domain/dto/token/commands"
+	tokenCommands "sso-service/internal/domain/dto/tokens/commands"
 	"sso-service/internal/domain/entities"
 	authErrors "sso-service/internal/domain/entities/errors"
 	sloglib "sso-service/internal/lib/log/slog"

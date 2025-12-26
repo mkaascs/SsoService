@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"context"
-	"sso-service/internal/domain/dto/token/commands"
-	"sso-service/internal/domain/dto/token/results"
+	"sso-service/internal/domain/dto/tokens/commands"
+	"sso-service/internal/domain/dto/tokens/results"
 	"sso-service/internal/domain/interfaces/tx"
 )
 

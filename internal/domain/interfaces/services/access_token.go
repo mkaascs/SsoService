@@ -1,11 +1,11 @@
 package services
 
 import (
-	"sso-service/internal/domain/dto/jwt/commands"
-	"sso-service/internal/domain/dto/jwt/results"
+	"sso-service/internal/domain/dto/tokens/commands"
+	"sso-service/internal/domain/dto/tokens/results"
 )
 
-type JWT interface {
+type AccessToken interface {
 	Generate(command commands.Generate) (*results.Generate, error)
 	Parse(command commands.Parse) (*results.Parse, error)
 }

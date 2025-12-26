@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"sso-service/internal/config"
 	"sso-service/internal/domain/dto/auth/commands"
-	tokenCommands "sso-service/internal/domain/dto/token/commands"
+	tokenCommands "sso-service/internal/domain/dto/tokens/commands"
 	userCommands "sso-service/internal/domain/dto/user/commands"
 	"sso-service/internal/domain/dto/user/results"
 	"sso-service/internal/domain/entities"
