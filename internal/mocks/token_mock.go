@@ -7,8 +7,8 @@ package mocks
 import (
 	context "context"
 	reflect "reflect"
-	commands "sso-service/internal/domain/dto/token/commands"
-	results "sso-service/internal/domain/dto/token/results"
+	"sso-service/internal/domain/dto/tokens/commands"
+	"sso-service/internal/domain/dto/tokens/results"
 	tx "sso-service/internal/domain/interfaces/tx"
 
 	gomock "github.com/golang/mock/gomock"

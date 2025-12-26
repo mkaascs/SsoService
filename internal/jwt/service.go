@@ -13,7 +13,7 @@ type service struct {
 	config config.SsoConfig
 }
 
-func New(config config.SsoConfig) (services.JWT, error) {
+func New(config config.SsoConfig) (services.AccessToken, error) {
 	if err := godotenv.Load(); err != nil {
 		return nil, fmt.Errorf("failed to load .env file: %w", err)
 	}

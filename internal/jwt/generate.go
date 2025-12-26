@@ -3,8 +3,8 @@ package jwt
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"sso-service/internal/domain/dto/jwt/commands"
-	"sso-service/internal/domain/dto/jwt/results"
+	"sso-service/internal/domain/dto/tokens/commands"
+	"sso-service/internal/domain/dto/tokens/results"
 	"time"
 )
 
