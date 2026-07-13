@@ -1,5 +1,10 @@
 # Auth Service gRPC (Go)
 
+![CI](https://github.com/mkaascs/AuthService/actions/workflows/ci.yml/badge.svg)
+![Lint](https://github.com/mkaascs/AuthService/actions/workflows/lint.yml/badge.svg)
+![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go)
+
+
 A high-performance gRPC microservice for authentication built in Go. Provides secure user authentication, profile management, and JWT token issuance for distributed applications.
 
 ---
