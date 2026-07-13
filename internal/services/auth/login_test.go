@@ -4,7 +4,6 @@ import (
 	"auth-service/internal/config"
 	"auth-service/internal/domain/dto/auth/commands"
 	tokenCommands "auth-service/internal/domain/dto/tokens/commands"
-	jwtResults "auth-service/internal/domain/dto/tokens/results"
 	tokenResults "auth-service/internal/domain/dto/tokens/results"
 	userCommands "auth-service/internal/domain/dto/user/commands"
 	"auth-service/internal/domain/dto/user/results"
@@ -73,10 +72,10 @@ func TestService_Login(t *testing.T) {
 			})
 
 		mock.AccessTokenSvc.EXPECT().Generate(gomock.Any()).
-			DoAndReturn(func(command tokenCommands.Generate) (*jwtResults.Generate, error) {
+			DoAndReturn(func(command tokenCommands.Generate) (*tokenResults.Generate, error) {
 				require.Equal(t, command.UserID, int64(2))
 				require.Equal(t, command.Roles, []string{entities.RoleAdmin})
-				return &jwtResults.Generate{
+				return &tokenResults.Generate{
 					Token: "access-token",
 				}, nil
 			})
@@ -286,7 +285,7 @@ func TestService_Login(t *testing.T) {
 			Return(&tokenResults.Update{UserID: 2}, nil)
 
 		mock.AccessTokenSvc.EXPECT().Generate(gomock.Any()).
-			Return(&jwtResults.Generate{Token: "access-token"}, nil)
+			Return(&tokenResults.Generate{Token: "access-token"}, nil)
 
 		mock.Tx.EXPECT().Commit().Return(nil)
 		mock.Tx.EXPECT().Rollback().Return(nil).AnyTimes()

@@ -5,7 +5,6 @@ import (
 	"auth-service/internal/domain/dto/auth/commands"
 	tokenCommands "auth-service/internal/domain/dto/tokens/commands"
 	"auth-service/internal/domain/dto/tokens/results"
-	jwtResults "auth-service/internal/domain/dto/tokens/results"
 	userResults "auth-service/internal/domain/dto/user/results"
 	"auth-service/internal/domain/entities"
 	authErrors "auth-service/internal/domain/entities/errors"
@@ -64,10 +63,10 @@ func TestService_Refresh(t *testing.T) {
 			})
 
 		mock.AccessTokenSvc.EXPECT().Generate(gomock.Any()).
-			DoAndReturn(func(command tokenCommands.Generate) (*jwtResults.Generate, error) {
+			DoAndReturn(func(command tokenCommands.Generate) (*results.Generate, error) {
 				require.Equal(t, command.UserID, int64(2))
 				require.Equal(t, command.Roles, []string{entities.RoleAdmin})
-				return &jwtResults.Generate{
+				return &results.Generate{
 					Token: "access-token",
 				}, nil
 			})
