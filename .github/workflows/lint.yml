@@ -20,6 +20,6 @@ jobs:
           go-version: stable
 
       - name: Linter
-        uses: actions/golangci-lint-action@v9
+        uses: golangci/golangci-lint-action@v9
         with:
           version: v2.12
